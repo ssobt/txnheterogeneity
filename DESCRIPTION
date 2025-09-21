@@ -1,0 +1,34 @@
+Package: txnheterogeneity
+Title: Calculate transcriptional heterogeneity in bulk RNA-seq, scRNA-seq, and scATAC-seq data
+Version: 0.0.0.9000
+Authors@R: 
+    person("S", "Sobti", , "sobtisushil@gmail.com", role = c("aut", "cre"))
+Description: This package provides functions to calculate and visualize transcriptional heterogeneity across different types of 
+    RNA-seq data, including bulk RNA-seq, single-cell RNA-seq (scRNA-seq), and single-cell ATAC-seq (scATAC-seq). 
+    It aims to facilitate the analysis of gene expression variability and regulatory element accessibility in heterogeneous cell populations.
+License: MIT + file LICENSE
+Imports:
+    cvequality (>= 0.2.0),
+    dplyr (>= 1.0.6),
+    ggplot2 (>= 3.3.3),
+    ggpubr (>= 0.4.0),
+    ArchR (>= 1.0.3),
+    Seurat,
+    qvalue (>= 2.18.0),
+    tidyr (>= 1.1.3),
+    parallel,
+    ggforce (>= 0.3.3),
+    pbapply (>= 1.4-3),
+    sparseMatrixStats (>= 1.0.0),
+    BSgenome.Hsapiens.UCSC.hg38 (>= 1.4.0),
+    plyr,
+    Matrix,
+    ComplexHeatmap,
+    grid,
+    circlize,
+    viridis,
+    scales,
+    genomation
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
