@@ -127,10 +127,11 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
         ## perform CV equality test between sample/patient groups for each gene
         mtx = cbind(group1_mtx, group2_mtx)
         pvals = apply(mtx, 1, function(k) {cvequality::asymptotic_test(x = k, y = c(rep('g1', ncol(group1_mtx)), rep('g2', ncol(group2_mtx))))$p_value})
+        cores_specified = getOption("mc.cores", cores)
         pvals_bkg = parallel::mclapply(background_distribution, function(bkg) {
             mtx = cbind(bkg$group1_bkg_mtx, bkg$group2_bkg_mtx)
             apply(mtx, 1, function(k) {cvequality::asymptotic_test(x = k, y = c(rep('g1', ncol(bkg$group1_bkg_mtx)), rep('g2', ncol(bkg$group2_bkg_mtx))))$p_value})
-        }, mc.cores = cores)
+        }, mc.cores = cores_specified)
 
         pvals = ifelse(is.na(pvals), 1, pvals) ## convert NA pvals to 1 for qvalue calculation
         pvals_bkg = lapply(pvals_bkg, function(x) ifelse(is.na(x), 1, x)) ## convert NA pvals to 1 for qvalue calculation
@@ -255,11 +256,12 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
         names(reference_dfs) = names(subsetted_data)
 
         ## perform CV equality test between sample/patient groups for each gene
+        cores_specified = getOption("mc.cores", cores)
         pvals = parallel::mclapply(subsetted_data, function(z){
                     apply(X = cbind(z[['high_exp_group']], z[['low_exp_group']]), MARGIN = 1, FUN = function(k){
                     cvequality::asymptotic_test(x = k, y = c(rep('high', length(k)/2), rep('low', length(k)/2)))$p_value
                 })
-        }, mc.cores = cores)
+        }, mc.cores = cores_specified)
         names(pvals) = names(subsetted_data)
         
         ## adjust pvals to qvals
