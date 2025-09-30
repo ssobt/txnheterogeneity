@@ -130,7 +130,7 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
         pvals_bkg = parallel::mclapply(background_distribution, function(bkg) {
             mtx = cbind(bkg$group1_bkg_mtx, bkg$group2_bkg_mtx)
             apply(mtx, 1, function(k) {cvequality::asymptotic_test(x = k, y = c(rep('g1', ncol(bkg$group1_bkg_mtx)), rep('g2', ncol(bkg$group2_bkg_mtx))))$p_value})
-        }, mc.cores = getOption("mc.cores", cores))
+        }, mc.cores = cores)
 
         pvals = ifelse(is.na(pvals), 1, pvals) ## convert NA pvals to 1 for qvalue calculation
         pvals_bkg = lapply(pvals_bkg, function(x) ifelse(is.na(x), 1, x)) ## convert NA pvals to 1 for qvalue calculation
@@ -259,7 +259,7 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
                     apply(X = cbind(z[['high_exp_group']], z[['low_exp_group']]), MARGIN = 1, FUN = function(k){
                     cvequality::asymptotic_test(x = k, y = c(rep('high', length(k)/2), rep('low', length(k)/2)))$p_value
                 })
-        }, mc.cores = getOption("mc.cores", cores))
+        }, mc.cores = cores)
         names(pvals) = names(subsetted_data)
         
         ## adjust pvals to qvals
