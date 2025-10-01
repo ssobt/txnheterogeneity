@@ -64,6 +64,7 @@ mtx_subsetter_scATAC = function(guide_nm, matrix, meta_data){return(matrix[, met
 scATAC_het <- function(scATAC_fragment_files = NULL, sample_names = NULL, control_sample_name = NULL, savepath = NULL, threads = 10, genome = "hg38", TSS_bed_path = NULL, macs2_path = NULL, fixed_cell_count = NULL, replicate_map = NULL, genes_to_use = NULL, samples_to_analyze = NULL, seed = 22) {
 
     ###### ArchR matrix extraction ###### ------------------------------------------------------------------
+    message("BSgenome.Hsapiens.UCSC.hg38 and ArchR are required to be attached for scATAC_het(). Please load both using library() before running this function.")
     if (!("BSgenome.Hsapiens.UCSC.hg38" %in% .packages()) & ("ArchR" %in% .packages())) {
         stop("BSgenome.Hsapiens.UCSC.hg38 or ArchR is not loaded. Please load both using library() before running this function.")
     }
