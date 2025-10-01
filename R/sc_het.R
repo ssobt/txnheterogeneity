@@ -5,7 +5,7 @@
 # packages necessary: cvequality, qvalue, Seurat, pbapply, sparseMatrixStats, dplyr, tidyr
 
 #' @noRd
-mtx_subsetter = function(guide_name, meta_data_sample_column, matrix, meta_data){return(matrix[, as.character(meta_data[[meta_data_sample_column]]) == guide_name])}
+mtx_subsetter_sc = function(guide_name, meta_data_sample_column, matrix, meta_data){return(matrix[, as.character(meta_data[[meta_data_sample_column]]) == guide_name])}
 
 #' @noRd
 CV_calculator = function(x){return((sparseMatrixStats::rowSds(x))/(sparseMatrixStats::rowMeans2(x)))}
@@ -20,7 +20,7 @@ CV_calculator = function(x){return((sparseMatrixStats::rowSds(x))/(sparseMatrixS
 #'
 #' @export
 gene_retention_pct = function(seurat_obj, cutoff){
-    filtered_raw_mtx <- seurat_obj@assays$RNA@data
+    filtered_raw_mtx <- Seurat::GetAssayData(seurat_obj, layer = "data")
     medians = sparseMatrixStats::rowMedians(filtered_raw_mtx)
     filtered_genes = as.numeric(medians) >= cutoff
     pct = 100*sum(filtered_genes)/length(filtered_genes)
@@ -35,6 +35,7 @@ gene_retention_pct = function(seurat_obj, cutoff){
 #' @description Calculate transcriptional heterogeneity in scRNA-seq samples compared to a control sample.
 #' @import dplyr
 #' @import tidyr
+#' @import Seurat
 #' @param seurat_obj A Seurat object containing the scRNA-seq data. The object should be pre-processed for cell quality control only.
 #' @param sample_cells_per_guide_cutoff Number of cells to sample per guide. It is highly recommended to choose a number above 50 for a representative outlook of heterogeneity, even at the expense of losing some samples in the analysis. Default uses cell count of the sample with the minimum number of cells.
 #' @param cutoff A numeric value indicating the minimum median expression threshold for genes to be included in the analysis. Default is 0.1. It is recommended to adjust this cutoff using the gene_retention_pct() function to retain ~10-20% of genes.
@@ -68,14 +69,15 @@ gene_retention_pct = function(seurat_obj, cutoff){
 #' @export
 
 
-
 sc_het <- function(seurat_obj, cutoff = 0.1, seed = 42, sample_cells_per_guide_cutoff = NULL, meta_data_sample_column = NULL, sample_names = NULL, control_sample_name = NULL){
     set.seed(seed)
     s.genes <- Seurat::cc.genes$s.genes
     g2m.genes <- Seurat::cc.genes$g2m.genes
-    seurat_obj_with_cc_scores <- CellCycleScoring(seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
-    seurat_obj <- NormalizeData(seurat_obj, normalization.method = 'RC')
-    filtered_raw_mtx <- seurat_obj@assays$RNA@data
+    seurat_obj <- Seurat::UpdateSeuratObject(seurat_obj)
+    seurat_obj <- SeuratObject::JoinLayers(seurat_obj)
+    seurat_obj <- Seurat::NormalizeData(seurat_obj, normalization.method = 'RC')
+    seurat_obj_with_cc_scores <- Seurat::CellCycleScoring(seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+    filtered_raw_mtx <- Seurat::GetAssayData(seurat_obj, layer = "data")
     medians = sparseMatrixStats::rowMedians(filtered_raw_mtx)
     median_df = data.frame(gene_medians = medians)
 
@@ -83,12 +85,12 @@ sc_het <- function(seurat_obj, cutoff = 0.1, seed = 42, sample_cells_per_guide_c
     filtered_meta_data <- seurat_obj@meta.data
     genes_to_keep = as.numeric(medians) >= cutoff
     message(paste0(100*sum(genes_to_keep)/length(genes_to_keep)), "% of genes kept after filtering out genes with median expression <", cutoff, ". Please adjust cutoff using gene_retention_pct() to find ideal cutoff for your dataset where low expressing genes are not retained. ~10-20% of genes kept is recommended.")
-    filtered_raw_mtx <- seurat_obj@assays$RNA@data[genes_to_keep,]
+    filtered_raw_mtx <- Seurat::GetAssayData(seurat_obj, layer = "data")[genes_to_keep,]
     filtered_meta_data <- filtered_meta_data[colnames(filtered_raw_mtx),]
 
     used_genes = rownames(filtered_raw_mtx)
     if (is.null(sample_names)){sample_names = unique(as.character(filtered_meta_data[[meta_data_sample_column]]))}
-    guide_subsetted_data = lapply(X = sample_names, FUN = mtx_subsetter, matrix = filtered_raw_mtx, meta_data = filtered_meta_data, meta_data_sample_column = meta_data_sample_column)
+    guide_subsetted_data = lapply(X = sample_names, FUN = mtx_subsetter_sc, matrix = filtered_raw_mtx, meta_data = filtered_meta_data, meta_data_sample_column = meta_data_sample_column)
     names(guide_subsetted_data) = sample_names
 
     cell_counts = lapply(guide_subsetted_data, ncol)
@@ -194,11 +196,11 @@ sc_het <- function(seurat_obj, cutoff = 0.1, seed = 42, sample_cells_per_guide_c
     cells_to_keep_from_fixed_cell_count <- colnames(Reduce(cbind, guide_subsetted_data[guides]))
 
 
-    Idents(object = CRISPRa_seurat) <- CRISPRa_seurat@meta.data$guide
-    CRISPRa_seurat = CRISPRa_seurat[genes_to_keep, cells_to_keep_from_fixed_cell_count]
+    Idents(object = seurat_obj) <- seurat_obj@meta.data$guide
+    seurat_obj = seurat_obj[genes_to_keep, cells_to_keep_from_fixed_cell_count]
 
     find_markers_wrapper = function(perturbed_gene){
-                                        Seurat::FindMarkers(CRISPRa_seurat, ident.1 = control_sample_name, ident.2 = perturbed_gene, test.use = 't', verbose = FALSE)
+                                        Seurat::FindMarkers(seurat_obj, ident.1 = control_sample_name, ident.2 = perturbed_gene, test.use = 't', verbose = FALSE)
     }
 
     mean_shifts_from_NT = pbapply::pblapply(guides[guides != control_sample_name], find_markers_wrapper)
@@ -206,13 +208,13 @@ sc_het <- function(seurat_obj, cutoff = 0.1, seed = 42, sample_cells_per_guide_c
 
     ## Find genes that see signinficant change in mean from control in bkg (randomized cell labels)
 
-    CRISPRa_seurat_random = CRISPRa_seurat
-    meta_temp = CRISPRa_seurat_random@meta.data
+    seurat_obj_random = seurat_obj
+    meta_temp = seurat_obj_random@meta.data
     meta_temp[randomized_cell_order, 'guide'] = designation_vector
-    CRISPRa_seurat_random@meta.data = meta_temp
+    seurat_obj_random@meta.data = meta_temp
 
     find_markers_wrapper_random = function(perturbed_gene){
-                                        Seurat::FindMarkers(CRISPRa_seurat_random, ident.1 = control_sample_name, ident.2 = perturbed_gene, test.use = 't', verbose = FALSE)
+                                        Seurat::FindMarkers(seurat_obj_random, ident.1 = control_sample_name, ident.2 = perturbed_gene, test.use = 't', verbose = FALSE)
     }
 
     mean_shifts_from_NT_bkg = pbapply::pblapply(guides[guides != control_sample_name], find_markers_wrapper_random)

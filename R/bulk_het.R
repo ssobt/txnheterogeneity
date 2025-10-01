@@ -10,7 +10,7 @@
 ## mtx_subsetter: Subsets the matrix into high and low expression groups based on the stratifying gene and quantile.
 
 #' @noRd
-mtx_subsetter = function(stratifying_gene, mtx, quant){
+mtx_subsetter_bulk = function(stratifying_gene, mtx, quant){
             high_cutoff_number = quantile(mtx[stratifying_gene,], quant)
             low_cutoff_number = quantile(mtx[stratifying_gene,], 1 - quant)
             group1_mtx = mtx[, mtx[stratifying_gene,] >= high_cutoff_number] ## higher expressing group
@@ -21,8 +21,8 @@ mtx_subsetter = function(stratifying_gene, mtx, quant){
 #' @noRd
 CV_bulk_calculator = function(values){return(sd(values)/mean(values))}
 
-#' @noRd
 # two-tailed pvalue for z-score
+#' @noRd
 z_pvalue <- function(z) {
     probability = pnorm(abs(z))
     if (probability < 0.5) {
@@ -107,6 +107,7 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
         group1_exp_mean = apply(group1_mtx, 1, mean)
         group2_exp_mean = apply(group2_mtx, 1, mean)
 
+
         ## bkg sampling ##
         ## initially do 10, fix later with a more official answer based on a distribution or certain % of total genes in rows that could be stratified on or % of number of samples in total dataset given
         times_to_repeat_sampling = 10
@@ -159,7 +160,7 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
         rna_seq_seurat <- Seurat::FindVariableFeatures(rna_seq_seurat)
         head(Seurat::VariableFeatures(rna_seq_seurat), 2000) -> var.genes
         var.genes.idx <- match(var.genes, row.names(rna_seq_seurat@assays$RNA))
-        raw_counts_2000DEGs <- as.data.frame(rna_seq_seurat@assays$RNA@data[var.genes.idx,])
+        raw_counts_2000DEGs <- as.data.frame(Seurat::GetAssayData(rna_seq_seurat, layer = "data")[var.genes.idx,])
 
         ### note for PCA here we are using the SVD algorithm
         # The algorithm returns the same number of PCs as there are observations
@@ -213,17 +214,19 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
         if (!(quant > 0.5 & quant < 1)){stop("quant must be a quantile between 0.5 and 1")}
         ## divide expression mtx into a list of mtxs subsetted by guide
         mtx = data
-        subsetted_data = lapply(X = stratifiers, FUN = mtx_subsetter, 
+        subsetted_data = lapply(X = stratifiers, FUN = mtx_subsetter_bulk, 
                                         mtx = mtx, quant = quant)
-        names(subsetted_data) = original_stratifiers = stratifiers
 
+        names(subsetted_data) = original_stratifiers = stratifiers
+        
         ## remove any stratifiers that have 0 as lower quantile cutoff
         subsetted_data = subsetted_data[c(!sapply(subsetted_data, function(x) x$low_cutoff_number == 0))]
         stratifiers = modified_stratifiers = names(subsetted_data)
 
+
         ## add a random set of bkg distribtution on random genes to compare with (10% of total subset or minimum of 5)
         random_genes = sample(setdiff(rownames(mtx), stratifiers), max(ceiling(0.1*length(stratifiers)), 5))
-        random_subsetted_data = lapply(X = random_genes, FUN = mtx_subsetter, mtx = mtx, quant = quant)
+        random_subsetted_data = lapply(X = random_genes, FUN = mtx_subsetter_bulk, mtx = mtx, quant = quant)
         names(random_subsetted_data) = paste0("random_", random_genes)
         ## remove any stratifiers that have 0 as lower quantile cutoff
         random_subsetted_data = random_subsetted_data[c(!sapply(random_subsetted_data, function(x) x$low_cutoff_number == 0))]
@@ -298,7 +301,7 @@ bulk_het <- function(data, g1 = NULL, g2 = NULL, quant = NULL, stratifiers = NUL
         rna_seq_seurat <- Seurat::FindVariableFeatures(rna_seq_seurat)
         head(Seurat::VariableFeatures(rna_seq_seurat), 2000) -> var.genes
         var.genes.idx <- match(var.genes, row.names(rna_seq_seurat@assays$RNA))
-        raw_counts_2000DEGs <- as.data.frame(rna_seq_seurat@assays$RNA@data[var.genes.idx,])
+        raw_counts_2000DEGs <- as.data.frame(Seurat::GetAssayData(rna_seq_seurat, layer = "data")[var.genes.idx,])
 
         ### note for PCA here we are using the SVD algorithm
         # The algorithm returns the same number of PCs as there are observations

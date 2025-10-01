@@ -4,10 +4,8 @@
 
 
 #' @noRd
-mtx_subsetter = function(guide_nm, matrix, meta_data){return(matrix[, meta_data$guide == guide_nm])}
+mtx_subsetter_scATAC = function(guide_nm, matrix, meta_data){return(matrix[, meta_data$guide == guide_nm])}
 
-#' @noRd
-CV_calculator = function(x){return((sparseMatrixStats::rowSds(x))/(sparseMatrixStats::rowMeans2(x)))}
 
 ##### Heterogeneity functions #####
 
@@ -66,7 +64,11 @@ CV_calculator = function(x){return((sparseMatrixStats::rowSds(x))/(sparseMatrixS
 scATAC_het <- function(scATAC_fragment_files = NULL, sample_names = NULL, control_sample_name = NULL, savepath = NULL, threads = 10, genome = "hg38", TSS_bed_path = NULL, macs2_path = NULL, fixed_cell_count = NULL, replicate_map = NULL, genes_to_use = NULL, samples_to_analyze = NULL, seed = 22) {
 
     ###### ArchR matrix extraction ###### ------------------------------------------------------------------
-
+    if (!("BSgenome.Hsapiens.UCSC.hg38" %in% .packages()) & ("ArchR" %in% .packages())) {
+        stop("BSgenome.Hsapiens.UCSC.hg38 or ArchR is not loaded. Please load both using library() before running this function.")
+    }
+    
+    set.seed(seed)
     setwd(savepath)
     addArchRThreads(threads = threads)
     addArchRGenome(genome)
@@ -210,7 +212,7 @@ scATAC_het <- function(scATAC_fragment_files = NULL, sample_names = NULL, contro
 
 
 
-    guide_subsetted_data = lapply(X = guides, FUN = mtx_subsetter, matrix = filtered_raw_mtx, meta_data = filtered_meta_data)
+    guide_subsetted_data = lapply(X = guides, FUN = mtx_subsetter_scATAC, matrix = filtered_raw_mtx, meta_data = filtered_meta_data)
 
     names(guide_subsetted_data) = guides
 
