@@ -10,7 +10,7 @@ package allows heterogeneity quantification between bulk RNA-seq samples using t
 'spread' of samples in principal component space as a proxy for this metric. 
 
 This package heavily utilizes [ArchR](https://www.archrproject.com) on the 
-backend to quantify scATAC-seq heterogeneity differences between samples.
+backend for peak calling to quantify scATAC-seq heterogeneity differences between samples.
 
 
 ## Installation
