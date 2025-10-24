@@ -70,8 +70,7 @@ plot_bulk_het(bulk_out = out, components_to_plot = c(1,2), plot_type = 'PC scatt
 plot_bulk_het(bulk_out = out, plot_type = 'distance violin', stratifier_gene = 'MIS18A')
 
 ```
-<img src="inst/bulk_scatter.png" alt="Output of plot_bulk_het()"  />
-<img src="inst/bulk_violin.png" alt="Output of plot_bulk_het()"  />
+<img src="inst/bulk_scatter_violin.png" alt="Output of plot_bulk_het()"  />
 
 Comparing heterogeneity between scRNA-seq samples 
 
