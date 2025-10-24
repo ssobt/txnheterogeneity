@@ -58,18 +58,20 @@ out = bulk_het(data = input_mtx, g1 = g1, g2 = g2, cores = 1)
 ## input_mtx is a matrix with rows as genes and columns as samples
 # set seed for reproducibility of bkg distribution sampling
 set.seed(123)
-## will stratify samples based on top and bottom 25\% expression of each stratifier gene
-## top 25\% (q75) will be compared to bottom 25\% (q25)
+## will stratify samples based on top and bottom 25% expression of each stratifier gene
+## top 25% (q75) will be compared to bottom 25% (q25)
 out = bulk_het(data = input_mtx, quant = 0.75, stratifiers = rownames(input_mtx)[1:10], cores = 10) 
 
 ### Plot ###
 
-plot_bulk_het(bulk_out = out, components_to_plot = c(1,2), plot_type = 'PC scatter', stratifier_gene = 'UBE2Q2P3') +
-  ggplot2::scale_color_brewer(palette = "Dark2")
+plot_bulk_het(bulk_out = out, components_to_plot = c(1,2), plot_type = 'PC scatter', stratifier_gene = 'MIS18A') +
+  ggplot2::scale_color_viridis_d()
 
-plot_bulk_het(bulk_out = out, plot_type = 'distance violin', stratifier_gene = 'UBE2Q2P3')
+plot_bulk_het(bulk_out = out, plot_type = 'distance violin', stratifier_gene = 'MIS18A')
 
 ```
+<img src="inst/bulk_scatter.png" alt="Output of plot_bulk_het()"  />
+<img src="inst/bulk_violin.png" alt="Output of plot_bulk_het()"  />
 
 Comparing heterogeneity between scRNA-seq samples 
 
