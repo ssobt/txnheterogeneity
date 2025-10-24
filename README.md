@@ -37,7 +37,7 @@ devtools::install_github("ssobt/txnheterogeneity", upgrade = "never", lib = "/tx
 
 ## Usage
 
-Comparing heterogeneity between two bulk RNA-seq samples or between groups of samples
+### Comparing heterogeneity between two bulk RNA-seq samples or between groups of samples
 
 ``` r
 .libPaths("/txnheterogeneity_package_destination_folder/") ## add location of package to searchable library paths
@@ -72,7 +72,7 @@ plot_bulk_het(bulk_out = out, plot_type = 'distance violin', stratifier_gene = '
 ```
 <img src="inst/bulk_scatter_violin.png" alt="Output of plot_bulk_het()"  />
 
-Comparing heterogeneity between scRNA-seq samples 
+### Comparing heterogeneity between scRNA-seq samples 
 
 ``` r
 .libPaths("/txnheterogeneity_package_destination_folder/") ## add location of package to searchable library paths
@@ -87,15 +87,17 @@ sc_het_out = sc_het(seurat_obj = CRISPRa_seurat, cutoff = 0.1, seed = 42, sample
 
 plot_sc_het(sc_het_output, plot_type = 'CV violin')
 
-plot_sc_het(sc_het_output, plot_type = 'mean violin', sample_names = c('sgRNA_ABC', 'sgRNA_XYZ'))
+plot_sc_het(sc_het_output, plot_type = 'mean violin', sample_names = c('RNF8-Ci', 'MIS18A-Ci'))
 
 plot_sc_het(sc_het_output, plot_type = 'cell cycle')
 
-plot_sc_het(sc_het_output, plot_type = 'heatmap', sample_names = 'sgRNA_XYZ')
+plot_sc_het(sc_het_output, plot_type = 'heatmap', sample_names = 'RNF8-Ci')
 
 ```
+<img src="inst/sc_ratios.png" alt="Output of plot_sc_het()"  />
+<img src="inst/sc_cc_ht.png" alt="Output of plot_sc_het()"  />
 
-Comparing heterogeneity between scATAC-seq samples 
+### Comparing heterogeneity between scATAC-seq samples 
 
 ``` r
 .libPaths("/txnheterogeneity_package_destination_folder/") ## add location of package to searchable library paths
@@ -119,13 +121,10 @@ macs2_path = '/home/ssobti/miniconda3/envs/archr/bin/macs2') ## please make sure
 
 ### Plot ###
 
-plot_scATAC_het(scATAC_het_out, plot_type = 'CV ratios', sample_names = c('RNF8-Ci', 'MIS18A-Ci'))
-
 plot_scATAC_het(scATAC_het_out, plot_type = 'CV between samples', sample_names = c('RNF8-Ci', 'MIS18A-Ci'))
 
 ```
-
-
+<img src="inst/scatac.png" alt="Output of plot_scATAC_het()"  />
 
 
 
