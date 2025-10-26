@@ -103,6 +103,8 @@ plot_sc_het(sc_het_output, plot_type = 'heatmap', sample_names = 'RNF8-Ci')
 .libPaths("/txnheterogeneity_package_destination_folder/") ## add location of package to searchable library paths
 library(txnheterogeneity)
 
+## load in quantified scATAC-seq fragment files (files ending in sample_name.fragments.tsv.gz) from 10x Genomics Cell Ranger ATAC pipeline or other software
+
 ## If you wish to combine sample replicates, please combine them into a list by specifying a vector with each
 sample present in your data and another vector with their renamed version as follows:
 
