@@ -105,7 +105,7 @@ library(txnheterogeneity)
 
 ## load in quantified scATAC-seq fragment files (files ending in sample_name.fragments.tsv.gz) from
 ## the 10x Genomics Cell Ranger ATAC pipeline or other software -- in this examples the path to all file_names is
-## inputted under the scATAC_fragment_files option
+## inputted as a character vector into the scATAC_fragment_files option
 
 ## If you wish to combine sample replicates, please combine them into a list by specifying a vector with 
 ## each sample present in your data and another vector with their renamed version as follows:
