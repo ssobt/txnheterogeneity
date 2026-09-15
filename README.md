@@ -70,7 +70,7 @@ plot_bulk_het(bulk_out = out, components_to_plot = c(1,2), plot_type = 'PC scatt
 plot_bulk_het(bulk_out = out, plot_type = 'distance violin', stratifier_gene = 'MIS18A')
 
 ```
-<img src="inst/bulk_scatter_violin.png" alt="Output of plot_bulk_het()"  />
+<img src="man/figures/bulk_scatter_violin.png" alt="Output of plot_bulk_het()"  />
 
 ### Comparing heterogeneity between scRNA-seq samples 
 
@@ -94,8 +94,8 @@ plot_sc_het(sc_het_output, plot_type = 'cell cycle')
 plot_sc_het(sc_het_output, plot_type = 'heatmap', sample_names = 'RNF8-Ci')
 
 ```
-<img src="inst/sc_ratios.png" alt="Output of plot_sc_het()"  />
-<img src="inst/sc_cc_ht.png" alt="Output of plot_sc_het()"  />
+<img src="man/figures/sc_ratios.png" alt="Output of plot_sc_het()"  />
+<img src="man/figures/sc_cc_ht.png" alt="Output of plot_sc_het()"  />
 
 ### Comparing heterogeneity between scATAC-seq samples 
 
@@ -128,7 +128,7 @@ macs2_path = '/home/ssobti/miniconda3/envs/archr/bin/macs2') ## please make sure
 plot_scATAC_het(scATAC_het_out, plot_type = 'CV between samples', sample_names = c('RNF8-Ci', 'MIS18A-Ci'))
 
 ```
-<img src="inst/scatac.png" alt="Output of plot_scATAC_het()"  />
+<img src="man/figures/scatac.png" alt="Output of plot_scATAC_het()"  />
 
 
 

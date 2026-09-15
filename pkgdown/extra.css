@@ -1,0 +1,154 @@
+/* ============================================================================
+   Shared pkgdown overrides — matches ssobt.github.io
+   ----------------------------------------------------------------------------
+   bslib 0.3.1 does not map every Bootstrap token we need (the navbar and the
+   <pre> blocks in particular keep their light defaults), so the remainder is
+   set explicitly here. Copied to pkgdown/extra.css in each package.
+   ========================================================================= */
+
+:root {
+  color-scheme: dark;
+  --ss-bg:      #0A0C10;
+  --ss-panel:   #11151C;
+  --ss-raised:  #161B24;
+  --ss-border:  #1E2530;
+  --ss-fg:      #E6EDF3;
+  --ss-muted:   #8B98A9;
+  --ss-faint:   #5B6675;
+  --ss-accent:  #35B779;
+  --ss-hot:     #FDE725;
+}
+
+body { background: var(--ss-bg); color: var(--ss-fg); }
+
+/* --- navbar -------------------------------------------------------------- */
+
+.navbar,
+.navbar.navbar-light,
+.navbar.bg-light,
+.navbar.bg-dark {
+  background-color: var(--ss-panel) !important;
+  border-bottom: 1px solid var(--ss-border);
+}
+.navbar .navbar-brand { color: var(--ss-fg) !important; font-weight: 600; }
+.navbar .nav-link,
+.navbar .navbar-nav .nav-link { color: var(--ss-muted) !important; }
+.navbar .nav-link:hover,
+.navbar .navbar-nav .nav-link:hover { color: var(--ss-accent) !important; }
+.navbar .navbar-nav .nav-link.active { color: var(--ss-accent) !important; }
+.navbar .navbar-toggler { border-color: var(--ss-border); }
+.navbar small.nav-text,
+.navbar .version { color: var(--ss-faint) !important; }
+
+/* Search box */
+.navbar form input,
+input.form-control,
+.algolia-autocomplete .aa-input {
+  background: var(--ss-raised) !important;
+  border: 1px solid var(--ss-border) !important;
+  color: var(--ss-fg) !important;
+}
+input.form-control::placeholder { color: var(--ss-faint); }
+
+/* --- code ---------------------------------------------------------------- */
+
+pre, code, kbd, samp {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+pre,
+div.sourceCode,
+pre.sourceCode,
+.reference pre,
+pre[class*="language-"] {
+  background-color: var(--ss-panel) !important;
+  color: var(--ss-fg) !important;
+  border: 1px solid var(--ss-border);
+  border-radius: 4px;
+}
+pre code { background: transparent !important; color: inherit !important; }
+
+code {
+  background-color: var(--ss-raised);
+  color: var(--ss-fg);
+  border: 1px solid var(--ss-border);
+  border-radius: 3px;
+  padding: 0.1em 0.32em;
+}
+a > code, a code { color: var(--ss-accent); border-color: transparent; background: transparent; }
+
+/* downlit syntax classes, retuned for a dark ground.
+   bslib compiles pkgdown's own highlighting into the Bootstrap bundle with
+   selectors that outrank these, so the colours are marked important rather
+   than matched selector-for-selector against a generated file. */
+pre .co, code .co { color: #6E7C8C !important; font-style: italic; }  /* comment  */
+pre .st, code .st { color: #9BD8BA !important; }                      /* string   */
+pre .fu, code .fu { color: #56B4E9 !important; }                      /* function */
+pre .kw, code .kw { color: #CC79A7 !important; }                      /* keyword  */
+pre .va, code .va { color: #E6EDF3 !important; }                      /* variable */
+pre .dv, pre .fl, code .dv, code .fl { color: #E69F00 !important; }   /* numbers  */
+pre .op, code .op { color: #8B98A9 !important; }                      /* operator */
+pre .cn, code .cn { color: #E69F00 !important; }                      /* constant */
+pre .sc, code .sc { color: #8B98A9 !important; }
+pre .at, code .at { color: #9BD8BA !important; }
+
+/* downlit autolinks identifiers; pkgdown's a.external-link (0,1,1) outranks
+   a bare `pre a` (0,0,2), so these need to be explicit or linked identifiers
+   render dark-on-dark. */
+pre a, code a,
+pre a.external-link, code a.external-link {
+  color: inherit !important;
+  background: transparent !important;
+  border: 0 !important;
+  text-decoration: none;
+}
+pre a:hover, code a:hover,
+pre a.external-link:hover, code a.external-link:hover { color: var(--ss-hot) !important; }
+
+/* Nav items must not pick up a light focus/hover plate. */
+.navbar .nav-link:focus,
+.navbar .nav-link:hover,
+.navbar .nav-link:focus-visible { background-color: transparent !important; }
+
+/* Example output blocks */
+pre.r-output, .r-output code { color: var(--ss-muted) !important; }
+
+/* --- text & links -------------------------------------------------------- */
+
+a { color: var(--ss-accent); }
+a:hover { color: var(--ss-hot); }
+h1, h2, h3, h4, h5 { color: var(--ss-fg); }
+h2, h3 { border-bottom-color: var(--ss-border) !important; }
+.text-muted, .template-article .contents .text-muted { color: var(--ss-muted) !important; }
+hr { border-color: var(--ss-border); opacity: 1; }
+
+/* --- sidebar, tables, misc ---------------------------------------------- */
+
+.sidebar, #toc, .page-header { color: var(--ss-muted); }
+.sidebar h2, .sidebar h3 { color: var(--ss-fg); font-size: 1.05rem; }
+#toc .nav-link { color: var(--ss-muted); }
+#toc .nav-link:hover, #toc .nav-link.active { color: var(--ss-accent); }
+
+table { color: var(--ss-fg); }
+table th, table td { border-color: var(--ss-border) !important; }
+.table > :not(caption) > * > * { background-color: transparent; color: var(--ss-fg); }
+
+blockquote {
+  border-left: 2px solid var(--ss-accent);
+  background: var(--ss-panel);
+  padding: 0.75rem 1rem;
+  color: var(--ss-muted);
+}
+
+img { max-width: 100%; height: auto; border-radius: 4px; }
+
+footer, .pkgdown-footer, .template-home footer {
+  color: var(--ss-faint);
+  border-top: 1px solid var(--ss-border);
+}
+footer a { color: var(--ss-muted); }
+
+/* Reference index rows */
+.ref-index td, .ref-index th { border-color: var(--ss-border) !important; }
+.ref-arguments td, .ref-arguments th { border-color: var(--ss-border) !important; }
+.ref-arguments th { color: var(--ss-muted); }

@@ -1,0 +1,56 @@
+url: https://ssobt.github.io/txnheterogeneity
+
+template:
+  bootstrap: 5
+  bslib:
+    bg: "#0A0C10"
+    fg: "#E6EDF3"
+    primary: "#35B779"
+    secondary: "#8B98A9"
+    border-color: "#1E2530"
+    code-bg: "#11151C"
+
+navbar:
+  bg: dark
+  structure:
+    left:  [intro, reference, articles]
+    right: [site, github]
+  components:
+    site:
+      text: ssobt.github.io
+      href: https://ssobt.github.io
+
+home:
+  title: txnheterogeneity — quantify transcriptional heterogeneity
+  description: >
+    Measure and compare transcriptome-wide expression heterogeneity and open
+    chromatin heterogeneity between conditions, across bulk RNA-seq,
+    scRNA-seq, and scATAC-seq.
+
+reference:
+- title: Bulk RNA-seq
+  desc: >
+    Compare heterogeneity between groups of bulk samples, either predefined or
+    stratified by the expression of candidate genes.
+  contents:
+  - bulk_het
+  - plot_bulk_het
+- title: Single-cell RNA-seq
+  desc: Per-condition transcriptome-wide coefficient of variation from a Seurat object.
+  contents:
+  - sc_het
+  - plot_sc_het
+- title: Single-cell ATAC-seq
+  desc: >
+    Open-chromatin heterogeneity from 10x fragment files, using ArchR for
+    peak calling.
+  contents:
+  - scATAC_het
+  - plot_scATAC_het
+- title: Utilities
+  contents:
+  - gene_retention_pct
+
+authors:
+  S Sobti:
+    href: https://ssobt.github.io
