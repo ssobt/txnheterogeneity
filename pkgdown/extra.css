@@ -1,154 +1,98 @@
 /* ============================================================================
-   Shared pkgdown overrides — matches ssobt.github.io
+   Light pkgdown theme
    ----------------------------------------------------------------------------
-   bslib 0.3.1 does not map every Bootstrap token we need (the navbar and the
-   <pre> blocks in particular keep their light defaults), so the remainder is
-   set explicitly here. Copied to pkgdown/extra.css in each package.
+   These packages document themselves with ggplot2 output — white canvas, black
+   marks, no alpha. On a dark page those figures either glare as white blocks or
+   lose their black text entirely, so the docs sites stay light even though
+   ssobt.github.io is dark. The green accent is the thread between them,
+   darkened here to hold contrast on white.
+
+   Deliberately small: Bootstrap's light defaults are already right, and
+   pkgdown's syntax highlighting is built for a light ground. Overriding it
+   would only make things worse.
    ========================================================================= */
 
 :root {
-  color-scheme: dark;
-  --ss-bg:      #0A0C10;
-  --ss-panel:   #11151C;
-  --ss-raised:  #161B24;
-  --ss-border:  #1E2530;
-  --ss-fg:      #E6EDF3;
-  --ss-muted:   #8B98A9;
-  --ss-faint:   #5B6675;
-  --ss-accent:  #35B779;
-  --ss-hot:     #FDE725;
+  --ss-accent:  #146B45;   /* site green, darkened for AA on white */
+  --ss-hot:     #7A5D00;
+  --ss-border:  #DFE5EC;
+  --ss-panel:   #F6F8FA;
+  --ss-fg:      #1A1F26;
+  --ss-muted:   #58626E;
 }
 
-body { background: var(--ss-bg); color: var(--ss-fg); }
+body { color: var(--ss-fg); }
 
 /* --- navbar -------------------------------------------------------------- */
 
-.navbar,
-.navbar.navbar-light,
-.navbar.bg-light,
-.navbar.bg-dark {
-  background-color: var(--ss-panel) !important;
+.navbar {
+  background-color: #FFFFFF !important;
   border-bottom: 1px solid var(--ss-border);
 }
 .navbar .navbar-brand { color: var(--ss-fg) !important; font-weight: 600; }
-.navbar .nav-link,
-.navbar .navbar-nav .nav-link { color: var(--ss-muted) !important; }
+.navbar .nav-link { color: var(--ss-muted) !important; }
 .navbar .nav-link:hover,
-.navbar .navbar-nav .nav-link:hover { color: var(--ss-accent) !important; }
 .navbar .navbar-nav .nav-link.active { color: var(--ss-accent) !important; }
-.navbar .navbar-toggler { border-color: var(--ss-border); }
-.navbar small.nav-text,
-.navbar .version { color: var(--ss-faint) !important; }
+.navbar .nav-link:focus,
+.navbar .nav-link:hover { background-color: transparent !important; }
+.navbar small.nav-text, .navbar .version { color: #7A838E !important; }
 
-/* Search box */
-.navbar form input,
-input.form-control,
-.algolia-autocomplete .aa-input {
-  background: var(--ss-raised) !important;
-  border: 1px solid var(--ss-border) !important;
-  color: var(--ss-fg) !important;
-}
-input.form-control::placeholder { color: var(--ss-faint); }
+/* --- links & headings ---------------------------------------------------- */
+
+a { color: var(--ss-accent); }
+a:hover { color: var(--ss-hot); }
+h2, h3 { border-bottom-color: var(--ss-border) !important; }
 
 /* --- code ---------------------------------------------------------------- */
 
 pre, code, kbd, samp {
   font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 }
-
-pre,
-div.sourceCode,
-pre.sourceCode,
-.reference pre,
-pre[class*="language-"] {
+pre, div.sourceCode {
   background-color: var(--ss-panel) !important;
-  color: var(--ss-fg) !important;
   border: 1px solid var(--ss-border);
   border-radius: 4px;
 }
-pre code { background: transparent !important; color: inherit !important; }
-
 code {
-  background-color: var(--ss-raised);
-  color: var(--ss-fg);
+  background-color: var(--ss-panel);
   border: 1px solid var(--ss-border);
   border-radius: 3px;
   padding: 0.1em 0.32em;
 }
-a > code, a code { color: var(--ss-accent); border-color: transparent; background: transparent; }
+a > code, a code { color: var(--ss-accent); background: transparent; border-color: transparent; }
+pre code { background: transparent !important; border: 0; padding: 0; }
 
-/* downlit syntax classes, retuned for a dark ground.
-   bslib compiles pkgdown's own highlighting into the Bootstrap bundle with
-   selectors that outrank these, so the colors are marked important rather
-   than matched selector-for-selector against a generated file. */
-pre .co, code .co { color: #6E7C8C !important; font-style: italic; }  /* comment  */
-pre .st, code .st { color: #9BD8BA !important; }                      /* string   */
-pre .fu, code .fu { color: #56B4E9 !important; }                      /* function */
-pre .kw, code .kw { color: #CC79A7 !important; }                      /* keyword  */
-pre .va, code .va { color: #E6EDF3 !important; }                      /* variable */
-pre .dv, pre .fl, code .dv, code .fl { color: #E69F00 !important; }   /* numbers  */
-pre .op, code .op { color: #8B98A9 !important; }                      /* operator */
-pre .cn, code .cn { color: #E69F00 !important; }                      /* constant */
-pre .sc, code .sc { color: #8B98A9 !important; }
-pre .at, code .at { color: #9BD8BA !important; }
+/* --- figures ------------------------------------------------------------- */
+/* The whole reason this theme is light: give the white-canvas plots a frame
+   so they read as figures rather than as holes in the page. */
 
-/* downlit autolinks identifiers; pkgdown's a.external-link (0,1,1) outranks
-   a bare `pre a` (0,0,2), so these need to be explicit or linked identifiers
-   render dark-on-dark. */
-pre a, code a,
-pre a.external-link, code a.external-link {
-  color: inherit !important;
-  background: transparent !important;
-  border: 0 !important;
-  text-decoration: none;
+.contents img,
+.template-article img,
+.template-home img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--ss-border);
+  border-radius: 4px;
+  background: #FFFFFF;
+  padding: 0.4rem;
 }
-pre a:hover, code a:hover,
-pre a.external-link:hover, code a.external-link:hover { color: var(--ss-hot) !important; }
+/* The navbar/logo and any inline icons should not get a frame. */
+.navbar img, img.icon, img.logo, .orcid { border: 0; padding: 0; background: none; }
 
-/* Nav items must not pick up a light focus/hover plate. */
-.navbar .nav-link:focus,
-.navbar .nav-link:hover,
-.navbar .nav-link:focus-visible { background-color: transparent !important; }
+/* pkgdown emits <img src="" class="logo"> when a package has no logo. Left
+   alone it renders as an empty framed box beside the title. */
+img[src=""] { display: none; }
 
-/* Example output blocks */
-pre.r-output, .r-output code { color: var(--ss-muted) !important; }
+/* --- tables & callouts --------------------------------------------------- */
 
-/* --- text & links -------------------------------------------------------- */
-
-a { color: var(--ss-accent); }
-a:hover { color: var(--ss-hot); }
-h1, h2, h3, h4, h5 { color: var(--ss-fg); }
-h2, h3 { border-bottom-color: var(--ss-border) !important; }
-.text-muted, .template-article .contents .text-muted { color: var(--ss-muted) !important; }
-hr { border-color: var(--ss-border); opacity: 1; }
-
-/* --- sidebar, tables, misc ---------------------------------------------- */
-
-.sidebar, #toc, .page-header { color: var(--ss-muted); }
-.sidebar h2, .sidebar h3 { color: var(--ss-fg); font-size: 1.05rem; }
-#toc .nav-link { color: var(--ss-muted); }
-#toc .nav-link:hover, #toc .nav-link.active { color: var(--ss-accent); }
-
-table { color: var(--ss-fg); }
 table th, table td { border-color: var(--ss-border) !important; }
-.table > :not(caption) > * > * { background-color: transparent; color: var(--ss-fg); }
-
 blockquote {
-  border-left: 2px solid var(--ss-accent);
+  border-left: 3px solid var(--ss-accent);
   background: var(--ss-panel);
   padding: 0.75rem 1rem;
   color: var(--ss-muted);
 }
 
-img { max-width: 100%; height: auto; border-radius: 4px; }
-
-footer, .pkgdown-footer, .template-home footer {
-  color: var(--ss-faint);
-  border-top: 1px solid var(--ss-border);
-}
-footer a { color: var(--ss-muted); }
-
-/* Reference index rows */
-.ref-index td, .ref-index th { border-color: var(--ss-border) !important; }
-.ref-arguments td, .ref-arguments th { border-color: var(--ss-border) !important; }
-.ref-arguments th { color: var(--ss-muted); }
+.sidebar h2, .sidebar h3 { font-size: 1.05rem; }
+#toc .nav-link:hover, #toc .nav-link.active { color: var(--ss-accent); }
+footer { color: var(--ss-muted); border-top: 1px solid var(--ss-border); }

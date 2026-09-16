@@ -3,15 +3,17 @@ url: https://ssobt.github.io/txnheterogeneity
 template:
   bootstrap: 5
   bslib:
-    bg: "#0A0C10"
-    fg: "#E6EDF3"
-    primary: "#35B779"
-    secondary: "#8B98A9"
-    border-color: "#1E2530"
-    code-bg: "#11151C"
+    # Light on purpose: the package documents itself with white-canvas ggplot
+    # figures (black violin plots), which are unreadable on a dark page.
+    bg: "#FFFFFF"
+    fg: "#1A1F26"
+    primary: "#146B45"
+    secondary: "#58626E"
+    border-color: "#DFE5EC"
+    code-bg: "#F6F8FA"
 
 navbar:
-  bg: dark
+  bg: light
   structure:
     left:  [intro, reference, articles]
     right: [site, github]
