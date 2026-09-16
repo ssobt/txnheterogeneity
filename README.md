@@ -134,3 +134,26 @@ plot_scATAC_het(scATAC_het_out, plot_type = 'CV between samples', sample_names =
 
 
 
+
+## Documentation
+
+Full documentation is at **[ssobt.github.io/txnheterogeneity](https://ssobt.github.io/txnheterogeneity/)**.
+
+- **[Quantifying transcriptional heterogeneity](https://ssobt.github.io/txnheterogeneity/articles/txnheterogeneity.html)** —
+  a walkthrough vignette covering all three assays, and — more importantly —
+  the controls that keep a dispersion result from being an artifact of
+  sequencing depth, detection rate, cell-cycle composition, or mean–variance
+  coupling.
+- **[Function reference](https://ssobt.github.io/txnheterogeneity/reference/index.html)** —
+  arguments and return values for `bulk_het()`, `sc_het()`, `scATAC_het()`,
+  their plotting counterparts, and `gene_retention_pct()`.
+
+## Related
+
+- **[VariPath](https://github.com/ssobt/VariPath)** — identifies pathway shifts
+  in Perturb-seq data using a varimax rotation of principal component space.
+- This package underpins:
+  Woo BJ\*, Sobti S\*, Suh JM, Yousefi H, Garcia K, Zhou S, Borah A,
+  Goodarzi H. *Systematic identification of chromatin organizers as tuners of
+  intratumoral heterogeneity.* bioRxiv 2026.
+  [doi:10.64898/2026.04.18.719392](https://doi.org/10.64898/2026.04.18.719392)
