@@ -1,3 +1,14 @@
+# Build this environment as x86_64. On Apple Silicon the default osx-arm64
+# subdir cannot satisfy the pins below — conda-forge and bioconda have thin
+# arm64 coverage for several of these (r-ggpointdensity has one arm64 build,
+# eighteen for osx-64), and the solver reports the shortfall as "package does
+# not exist", which is misleading.
+#
+#   CONDA_SUBDIR=osx-64 mamba env create -f inst/txnheterogeneity.yml
+#   conda activate txnheterogeneity
+#   conda config --env --set subdir osx-64   # keep later installs x86_64
+#
+# On Linux, create it normally.
 name: txnheterogeneity
 channels:
   - conda-forge
@@ -39,7 +50,6 @@ dependencies:
   - r-viridis
   - r-archr=1.0.3
   - r-signac
-  - r-cvequality
   - bioconductor-qvalue
   - r-ggforce
   - r-pbapply
@@ -48,3 +58,7 @@ dependencies:
   - bioconductor-bsgenome.hsapiens.ucsc.hg38
   - bioconductor-genomation
   - pip
+  # cvequality is installed from CRAN, not conda: the conda build pins
+  # r-base >=3.6,<3.7, which is incompatible with the r-seurat and r-archr
+  # versions pinned above and makes this environment unsolvable.
+  #   install.packages("cvequality", repos = "https://cloud.r-project.org")
