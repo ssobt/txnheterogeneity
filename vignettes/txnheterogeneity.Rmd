@@ -113,7 +113,7 @@ sc_out <- sc_het(
   sample_names                 = c("NT", "RNF8", "MIS18A"),
   control_sample_name          = "NT",
   cutoff                       = 0.1,   # gene retention threshold
-  sample_cells_per_guide_cutoff = 50,   # equalise cells per condition
+  sample_cells_per_guide_cutoff = 50,   # equalize cells per condition
   seed                         = 42
 )
 ```
@@ -183,7 +183,7 @@ environment.
 Dispersion metrics are easy to fool. Before concluding that a perturbation
 changed heterogeneity, rule out the alternatives:
 
-1. **Depth and cell number** — equalised via `sample_cells_per_guide_cutoff`.
+1. **Depth and cell number** — equalized via `sample_cells_per_guide_cutoff`.
 2. **Detection rate** — controlled by `cutoff`; check with `gene_retention_pct()`.
 3. **Cell cycle** — inspect the `"cell cycle"` plot.
 4. **Mean–variance coupling** — CV falls as mean expression rises, so compare the

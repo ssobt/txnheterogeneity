@@ -79,7 +79,7 @@ a > code, a code { color: var(--ss-accent); border-color: transparent; backgroun
 
 /* downlit syntax classes, retuned for a dark ground.
    bslib compiles pkgdown's own highlighting into the Bootstrap bundle with
-   selectors that outrank these, so the colours are marked important rather
+   selectors that outrank these, so the colors are marked important rather
    than matched selector-for-selector against a generated file. */
 pre .co, code .co { color: #6E7C8C !important; font-style: italic; }  /* comment  */
 pre .st, code .st { color: #9BD8BA !important; }                      /* string   */
